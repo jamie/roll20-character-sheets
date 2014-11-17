@@ -1,0 +1,30 @@
+require 'erb'
+
+class Page
+  def initialize(filename)
+    @filename = filename
+  end
+
+  def write(outfile)
+    File.open(outfile, 'w') do |file|
+      file.puts(build)
+    end
+  end
+
+private
+  def build
+    erb.result(binding)
+  end
+
+  def erb
+    ERB.new(template, 0, "", "@page")
+  end
+
+  def template
+    File.read(@filename)
+  end
+end
+
+task :default do
+  Page.new('pathfinder-neceros.html.erb').write('pathfinder-neceros.html')
+end
