@@ -7,7 +7,18 @@ end
 
 require 'erubis'
 
+module Helpers
+  def sheet_tab(name, id, checked=false)
+    <<-END
+<input type="radio" name="attr_tab" class="sheet-tab sheet-tab#{id}" value="#{id}" title="#{name}"#{' checked="checked"' if checked}/>
+<span class="sheet-tab sheet-tab#{id}">#{name}</span>
+END
+  end
+end
+
 class Page
+  include Helpers
+
   def initialize(filename)
     @filename = filename
   end
