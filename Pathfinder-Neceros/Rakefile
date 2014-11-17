@@ -1,4 +1,11 @@
-require 'erb'
+require 'rubygems'
+require 'isolate'
+
+Isolate.now! do
+  gem 'erubis'
+end
+
+require 'erubis'
 
 class Page
   def initialize(filename)
@@ -17,7 +24,7 @@ private
   end
 
   def erb
-    ERB.new(template, 0, "", "@page")
+    Erubis::Eruby.new(template)
   end
 
   def template
