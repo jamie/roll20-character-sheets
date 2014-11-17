@@ -6,6 +6,37 @@ Isolate.now! do
 end
 
 require 'erubis'
+require 'ostruct'
+
+class Skill
+  attr_reader :ability, :name, :key
+
+  def initialize(opts)
+    @name = opts[:name]
+    @index = opts[:index]
+    @key = opts[:key] || @name.gsub(/[ ]/, '-').gsub(/[()]/, '') + @index.to_s
+    @named = opts[:named]
+
+    @ability = opts[:ability]
+    @trained = opts[:trained]
+  end
+
+  def acp?
+    %(STR DEX).include? ability
+  end
+
+  def acp_type
+    @ability.empty? ? 'checkbox' : 'number'
+  end
+
+  def named?
+    @named
+  end
+
+  def untrained?
+    !@trained
+  end
+end
 
 module Helpers
   def sheet_tab(name, id, checked=false)
@@ -13,6 +44,62 @@ module Helpers
 <input type="radio" name="attr_tab" class="sheet-tab sheet-tab#{id}" value="#{id}" title="#{name}"#{' checked="checked"' if checked}/>
 <span class="sheet-tab sheet-tab#{id}">#{name}</span>
 END
+  end
+
+  def abilities
+    %w(STR DEX CON INT WIS CHA)
+  end
+
+  def skills
+    [
+      Skill.new(name: 'Acrobatics',       ability: 'DEX'),
+      Skill.new(name: 'Appraise',         ability: 'INT'),
+      Skill.new(name: 'Bluff',            ability: 'CHA'),
+      Skill.new(name: 'Climb',            ability: 'STR'),
+      Skill.new(name: 'Craft',            ability: 'INT', named: true),
+      Skill.new(name: 'Craft',            ability: 'INT', named: true, index: 2),
+      Skill.new(name: 'Craft',            ability: 'INT', named: true, index: 3),
+      Skill.new(name: 'Diplomacy',        ability: 'CHA'),
+      Skill.new(name: 'Disable Device',   ability: 'DEX', trained: true),
+      Skill.new(name: 'Disguise',         ability: 'CHA'),
+      Skill.new(name: 'Escape Artist',    ability: 'DEX'),
+      Skill.new(name: 'Fly',              ability: 'DEX'),
+      Skill.new(name: 'Handle Animal',    ability: 'CHA', trained: true),
+      Skill.new(name: 'Heal',             ability: 'WIS'),
+      Skill.new(name: 'Intimidate',       ability: 'CHA'),
+      Skill.new(name: 'Knowledge (Arcana)',        ability: 'INT', trained: true),
+      Skill.new(name: 'Knowledge (Dungeoneering)', ability: 'INT', trained: true),
+      Skill.new(name: 'Knowledge (Engineering)',   ability: 'INT', trained: true),
+      Skill.new(name: 'Knowledge (Geography)',     ability: 'INT', trained: true),
+      Skill.new(name: 'Knowledge (History)',       ability: 'INT', trained: true),
+      Skill.new(name: 'Knowledge (Local)',         ability: 'INT', trained: true),
+      Skill.new(name: 'Knowledge (Nature)',        ability: 'INT', trained: true),
+      Skill.new(name: 'Knowledge (Nobility)',      ability: 'INT', trained: true),
+      Skill.new(name: 'Knowledge (Planes)',        ability: 'INT', trained: true),
+      Skill.new(name: 'Knowledge (Religion)',      ability: 'INT', trained: true),
+      Skill.new(name: 'Linguistics',      ability: 'INT', trained: true),
+      Skill.new(name: 'Perception',       ability: 'WIS'),
+      Skill.new(name: 'Perform',          ability: 'CHA', named: true),
+      Skill.new(name: 'Perform',          ability: 'CHA', named: true, index: 2),
+      Skill.new(name: 'Perform',          ability: 'CHA', named: true, index: 3),
+      Skill.new(name: 'Profession',       ability: 'WIS', named: true, trained: true),
+      Skill.new(name: 'Profession',       ability: 'WIS', named: true, trained: true, index: 2),
+      Skill.new(name: 'Profession',       ability: 'WIS', named: true, trained: true, index: 3),
+      Skill.new(name: 'Ride',             ability: 'DEX'),
+      Skill.new(name: 'Sense Motive',     ability: 'WIS'),
+      Skill.new(name: 'Sleight of Hand',  ability: 'DEX', trained: true),
+      Skill.new(name: 'Spellcraft',       ability: 'INT', trained: true),
+      Skill.new(name: 'Stealth',          ability: 'DEX'),
+      Skill.new(name: 'Survival',         ability: 'WIS'),
+      Skill.new(name: 'Swim',             ability: 'STR'),
+      Skill.new(name: 'Use Magic Device', ability: 'CHA', trained: true),
+      Skill.new(key: 'Misc-Skill-0', ability: '', named: true, trained: true),
+      Skill.new(key: 'Misc-Skill-1', ability: '', named: true, trained: true),
+      Skill.new(key: 'Misc-Skill-2', ability: '', named: true, trained: true),
+      Skill.new(key: 'Misc-Skill-3', ability: '', named: true, trained: true),
+      Skill.new(key: 'Misc-Skill-4', ability: '', named: true, trained: true),
+      Skill.new(key: 'Misc-Skill-5', ability: '', named: true, trained: true),
+    ]
   end
 end
 
